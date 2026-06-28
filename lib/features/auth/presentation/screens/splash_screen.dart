@@ -42,7 +42,7 @@ class _SplashScreenState extends State<SplashScreen> {
 class _SplashBody extends StatelessWidget {
   const _SplashBody();
 
-  static const String _logoPath = 'assets/images/masar_logo.png';
+  static const String _logoPath = 'assets/assets/white_logo.png';
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +58,7 @@ class _SplashBody extends StatelessWidget {
           end: Alignment.bottomCenter,
           colors: [
             Color(0xFF0F766E),
-            Color(0xFF176E91),
+            Color(0xFF0B5F4B),
             Color(0xFF2148B7),
           ],
           stops: [0.0, 0.48, 1.0],

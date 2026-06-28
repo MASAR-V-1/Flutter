@@ -5,7 +5,7 @@ class AppSpacing {
   static const double mobileSidePadding = 45.0;
 
   // Field Constraints
-  static const double fieldHeight = 48.0;
+  static const double fieldHeight = 40.0;
 
   // Rail & Desktop constraints
   static const double railWidth = 72.0;

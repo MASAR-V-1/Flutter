@@ -18,7 +18,7 @@ class AuthResponsiveLayout extends StatelessWidget {
     this.sideItems = const [],
   });
 
-  static const String logoPath = 'assets/images/masar_logo.png';
+  static const String logoPath = 'assets/assets/white_logo.png';
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +39,7 @@ class AuthResponsiveLayout extends StatelessWidget {
                   left: 0,
                   right: 0,
                   height: isDesktop ? 350 : 310,
-                  child: const _AuthGradientHeader(),
+                  child: const AuthGradientHeader(bottomRadius: 15),
                 ),
                 SafeArea(
                   child: SingleChildScrollView(
@@ -53,22 +53,25 @@ class AuthResponsiveLayout extends StatelessWidget {
                     ),
                     child: Column(
                       children: [
-                        const SizedBox(height: 18),
+                        const SizedBox(height: 12),
+
                         Image.asset(
                           logoPath,
-                          width: isDesktop ? 160 : 130,
+                          width: isDesktop ? 150 : 115,
                           fit: BoxFit.contain,
                           errorBuilder: (context, error, stackTrace) {
                             return const SizedBox.shrink();
                           },
                         ),
-                        const SizedBox(height: 22),
+
+                        const SizedBox(height: 18),
+
                         Text(
                           title,
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: isDesktop ? 42 : 30,
+                            fontSize: isDesktop ? 42 : 26,
                             fontWeight: FontWeight.w800,
                             height: 1.25,
                           ),
@@ -79,7 +82,7 @@ class AuthResponsiveLayout extends StatelessWidget {
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: Colors.white.withOpacity(0.92),
-                            fontSize: isDesktop ? 18 : 15,
+                            fontSize: isDesktop ? 18 : 12,
                             fontWeight: FontWeight.w500,
                             height: 1.6,
                           ),
@@ -113,38 +116,34 @@ class AuthResponsiveLayout extends StatelessWidget {
   }
 }
 
-class _AuthGradientHeader extends StatelessWidget {
-  const _AuthGradientHeader();
+class AuthGradientHeader extends StatelessWidget {
+  final double bottomRadius;
+
+  const AuthGradientHeader({super.key, this.bottomRadius = 15});
 
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: const BorderRadius.only(
-        bottomLeft: Radius.circular(12),
-        bottomRight: Radius.circular(12),
+      borderRadius: BorderRadius.only(
+        bottomLeft: Radius.circular(bottomRadius),
+        bottomRight: Radius.circular(bottomRadius),
       ),
       child: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topRight,
             end: Alignment.bottomLeft,
-            colors: [
-              Color(0xFF0B5F4B),
-              Color(0xFF176E91),
-              Color(0xFF2563EB),
-            ],
+            colors: [Color(0xFF0B5F4B), Color(0xFF0B5F4B), Color(0xFF2563EB)],
           ),
         ),
-        child: const CustomPaint(
-          painter: _AuthWavePainter(),
-        ),
+        child: const CustomPaint(painter: AuthWavePainter()),
       ),
     );
   }
 }
 
-class _AuthWavePainter extends CustomPainter {
-  const _AuthWavePainter();
+class AuthWavePainter extends CustomPainter {
+  const AuthWavePainter();
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -199,9 +198,7 @@ class _DesktopAuthCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
-      constraints: const BoxConstraints(
-        maxWidth: 1040,
-      ),
+      constraints: const BoxConstraints(maxWidth: 1040),
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -218,10 +215,7 @@ class _DesktopAuthCard extends StatelessWidget {
         child: Row(
           children: [
             Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(44),
-                child: child,
-              ),
+              child: Padding(padding: const EdgeInsets.all(44), child: child),
             ),
             Expanded(
               child: Container(
@@ -278,20 +272,6 @@ class _MobileAuthCard extends StatelessWidget {
             child: child,
           ),
           const SizedBox(height: 18),
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(22),
-            decoration: BoxDecoration(
-              color: const Color(0xFFEFF2FF),
-              borderRadius: BorderRadius.circular(14),
-              border: Border.all(color: const Color(0xFFDCE3FF)),
-            ),
-            child: _AuthSidePanel(
-              title: sideTitle,
-              subtitle: sideSubtitle,
-              items: sideItems,
-            ),
-          ),
         ],
       ),
     );
@@ -344,7 +324,7 @@ class _AuthSidePanel extends StatelessWidget {
         ),
         const SizedBox(height: 36),
         ...items.map(
-              (item) => Padding(
+          (item) => Padding(
             padding: const EdgeInsets.only(bottom: 16),
             child: Row(
               children: [
@@ -429,17 +409,17 @@ class _AuthTextFieldState extends State<AuthTextField> {
         prefixIcon: widget.icon == null ? null : Icon(widget.icon),
         suffixIcon: widget.isPassword
             ? IconButton(
-          onPressed: () {
-            setState(() {
-              _obscureText = !_obscureText;
-            });
-          },
-          icon: Icon(
-            _obscureText
-                ? Icons.visibility_off_outlined
-                : Icons.visibility_outlined,
-          ),
-        )
+                onPressed: () {
+                  setState(() {
+                    _obscureText = !_obscureText;
+                  });
+                },
+                icon: Icon(
+                  _obscureText
+                      ? Icons.visibility_off_outlined
+                      : Icons.visibility_outlined,
+                ),
+              )
             : null,
         filled: true,
         fillColor: const Color(0xFFFAFAFF),
@@ -457,10 +437,7 @@ class _AuthTextFieldState extends State<AuthTextField> {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(
-            color: Color(0xFF0B5F4B),
-            width: 1.4,
-          ),
+          borderSide: const BorderSide(color: Color(0xFF0B5F4B), width: 1.4),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
@@ -488,10 +465,8 @@ class AuthPrimaryButton extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       height: 52,
-      child: ElevatedButton.icon(
+      child: ElevatedButton(
         onPressed: onPressed,
-        icon: icon == null ? const SizedBox.shrink() : Icon(icon),
-        label: Text(text),
         style: ElevatedButton.styleFrom(
           backgroundColor: const Color(0xFF0B5F4B),
           foregroundColor: Colors.white,
@@ -499,10 +474,19 @@ class AuthPrimaryButton extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
-          textStyle: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w800,
-          ),
+          textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(text),
+
+            if (icon != null) ...[
+              const SizedBox(width: 8),
+              Icon(icon, size: 20),
+            ],
+          ],
         ),
       ),
     );
@@ -536,10 +520,7 @@ class AuthSecondaryButton extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
-          textStyle: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w800,
-          ),
+          textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
         ),
       ),
     );
@@ -583,6 +564,35 @@ class AuthInfoBox extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class AuthBackToLoginButton extends StatelessWidget {
+  final VoidCallback onPressed;
+
+  const AuthBackToLoginButton({super.key, required this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: TextButton(
+        onPressed: onPressed,
+        child: const Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'العودة إلى تسجيل الدخول',
+              style: TextStyle(
+                color: Color(0xFF0B5F4B),
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+            SizedBox(width: 8),
+            Icon(Icons.arrow_forward, color: Color(0xFF0B5F4B), size: 20),
+          ],
+        ),
       ),
     );
   }

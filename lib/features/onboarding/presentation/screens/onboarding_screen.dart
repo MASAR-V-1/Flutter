@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:masar_app/core/theme/app_colors.dart';
+import 'package:masar_app/core/theme/app_strings.dart';
+import 'package:masar_app/features/auth/presentation/screens/login_screen.dart';
+import 'package:masar_app/features/auth/presentation/widgets/auth_responsive_layout.dart';
+import 'package:masar_app/features/auth/presentation/widgets/auth_responsive_layout.dart';
+
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
 
@@ -19,25 +25,22 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   final List<_OnboardingPageData> _pages = const [
     _OnboardingPageData(
-      title: 'مرحبًا بك في مسار',
-      subtitle:
-      'تابع مهامك وعمليات مؤسستك من مكان واحد، بطريقة منظمة وواضحة.',
+      title: AppStrings.onboardingTitle1,
+      subtitle: AppStrings.onboardingSubtitle1,
       icon: Icons.route_outlined,
-      primaryLabel: 'مساحة عمل ذكية',
+      primaryLabel: AppStrings.onboardingLabel1,
     ),
     _OnboardingPageData(
-      title: 'وصول حسب دورك',
-      subtitle:
-      'ستظهر لك فقط الوحدات والمهام التي منحك مدير المؤسسة صلاحية الوصول إليها.',
+      title: AppStrings.onboardingTitle2,
+      subtitle: AppStrings.onboardingSubtitle2,
       icon: Icons.verified_user_outlined,
-      primaryLabel: 'صلاحيات آمنة',
+      primaryLabel: AppStrings.onboardingLabel2,
     ),
     _OnboardingPageData(
-      title: 'ابدأ عملك بسهولة',
-      subtitle:
-      'سجّل الدخول باستخدام البريد الإلكتروني أو اسم المستخدم وكلمة المرور التي فعلتها من الرابط.',
+      title: AppStrings.onboardingTitle3,
+      subtitle: AppStrings.onboardingSubtitle3,
       icon: Icons.dashboard_customize_outlined,
-      primaryLabel: 'جاهز للانطلاق',
+      primaryLabel: AppStrings.onboardingLabel3,
     ),
   ];
 
@@ -48,7 +51,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   void _goToLogin() {
-    context.go('/login');
+    context.go(LoginScreen.routePath);
   }
 
   void _nextPage() {
@@ -68,7 +71,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        backgroundColor: const Color(0xFFF5F5FF),
+        backgroundColor: AppColors.background,
         body: LayoutBuilder(
           builder: (context, constraints) {
             final width = constraints.maxWidth;
@@ -81,7 +84,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   left: 0,
                   right: 0,
                   height: 330,
-                  child: _OnboardingGradientHeader(),
+                  child: AuthGradientHeader(bottomRadius: 15),
                 ),
 
                 SafeArea(
@@ -111,7 +114,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                 foregroundColor: Colors.white,
                               ),
                               child: const Text(
-                                'تخطي',
+                                AppStrings.onboardingSkip,
                                 style: TextStyle(
                                   fontWeight: FontWeight.w700,
                                   fontSize: 14,
@@ -157,44 +160,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                               ),
                               const SizedBox(height: 24),
 
-                              SizedBox(
-                                width: double.infinity,
-                                height: 54,
-                                child: ElevatedButton(
-                                  onPressed: _nextPage,
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: const Color(0xFF0B5F4B),
-                                    foregroundColor: Colors.white,
-                                    elevation: 0,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(14),
-                                    ),
-                                    textStyle: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w800,
-                                    ),
-                                  ),
-                                  child: Text(
-                                    _currentIndex == _pages.length - 1
-                                        ? 'تسجيل الدخول'
-                                        : 'التالي',
-                                  ),
-                                ),
+                              AuthPrimaryButton(
+                                text: _currentIndex == _pages.length - 1
+                                    ? AppStrings.onboardingLogin
+                                    : AppStrings.onboardingNext,
+                                icon: Icons.arrow_forward_rounded,
+                                onPressed: _nextPage,
                               ),
-
-                              const SizedBox(height: 12),
-
-                              if (_currentIndex == _pages.length - 1)
-                                TextButton(
-                                  onPressed: _goToLogin,
-                                  child: const Text(
-                                    'لديك حساب بالفعل؟ الدخول الآن',
-                                    style: TextStyle(
-                                      color: Color(0xFF0B5F4B),
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                ),
                             ],
                           ),
                         ),
@@ -215,10 +187,7 @@ class _OnboardingPage extends StatelessWidget {
   final _OnboardingPageData data;
   final bool isTablet;
 
-  const _OnboardingPage({
-    required this.data,
-    required this.isTablet,
-  });
+  const _OnboardingPage({required this.data, required this.isTablet});
 
   @override
   Widget build(BuildContext context) {
@@ -249,7 +218,7 @@ class _OnboardingPage extends StatelessWidget {
                 data.title,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: const Color(0xFF111827),
+                  color: AppColors.textPrimary,
                   fontSize: isTablet ? 34 : 28,
                   fontWeight: FontWeight.w900,
                   height: 1.3,
@@ -262,7 +231,7 @@ class _OnboardingPage extends StatelessWidget {
                 data.subtitle,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: const Color(0xFF6B7280),
+                  color: AppColors.textVariant,
                   fontSize: isTablet ? 18 : 15,
                   fontWeight: FontWeight.w500,
                   height: 1.8,
@@ -347,11 +316,7 @@ class _IllustrationCard extends StatelessWidget {
                 ),
                 borderRadius: BorderRadius.circular(32),
               ),
-              child: Icon(
-                icon,
-                color: Colors.white,
-                size: isTablet ? 64 : 54,
-              ),
+              child: Icon(icon, color: Colors.white, size: isTablet ? 64 : 54),
             ),
           ),
 
@@ -360,26 +325,15 @@ class _IllustrationCard extends StatelessWidget {
             left: 26,
             bottom: 24,
             child: Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 14,
-                vertical: 12,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
               decoration: BoxDecoration(
                 color: const Color(0xFFF5F5FF),
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(
-                  color: const Color(0xFFE5E7EB),
-                ),
+                border: Border.all(color: const Color(0xFFE5E7EB)),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(
-                    Icons.auto_awesome_outlined,
-                    color: Color(0xFF0B5F4B),
-                    size: 19,
-                  ),
-                  const SizedBox(width: 8),
                   Flexible(
                     child: Text(
                       label,
@@ -391,6 +345,13 @@ class _IllustrationCard extends StatelessWidget {
                       ),
                     ),
                   ),
+                  const SizedBox(width: 8),
+                  const Icon(
+                    Icons.auto_awesome_outlined,
+                    color: Color(0xFF0B5F4B),
+                    size: 19,
+                  ),
+
                 ],
               ),
             ),
@@ -425,11 +386,7 @@ class _SmallBubble extends StatelessWidget {
         color: color,
         borderRadius: BorderRadius.circular(20),
       ),
-      child: Icon(
-        icon,
-        color: iconColor,
-        size: 28,
-      ),
+      child: Icon(icon, color: iconColor, size: 28),
     );
   }
 }
@@ -438,10 +395,7 @@ class _DotsIndicator extends StatelessWidget {
   final int count;
   final int currentIndex;
 
-  const _DotsIndicator({
-    required this.count,
-    required this.currentIndex,
-  });
+  const _DotsIndicator({required this.count, required this.currentIndex});
 
   @override
   Widget build(BuildContext context) {
@@ -456,95 +410,13 @@ class _DotsIndicator extends StatelessWidget {
           width: isActive ? 28 : 9,
           height: 9,
           decoration: BoxDecoration(
-            color: isActive
-                ? const Color(0xFF0B5F4B)
-                : const Color(0xFFD1D5DB),
+            color: isActive ? const Color(0xFF0B5F4B) : const Color(0xFFD1D5DB),
             borderRadius: BorderRadius.circular(99),
           ),
         );
       }),
     );
   }
-}
-
-class _OnboardingGradientHeader extends StatelessWidget {
-  const _OnboardingGradientHeader();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topRight,
-          end: Alignment.bottomLeft,
-          colors: [
-            Color(0xFF0F766E),
-            Color(0xFF176E91),
-            Color(0xFF2148B7),
-          ],
-        ),
-      ),
-      child: const CustomPaint(
-        painter: _OnboardingWavePainter(),
-      ),
-    );
-  }
-}
-
-class _OnboardingWavePainter extends CustomPainter {
-  const _OnboardingWavePainter();
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = Colors.white.withOpacity(0.11)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.8;
-
-    final firstWave = Path()
-      ..moveTo(size.width * -0.05, size.height * 0.18)
-      ..cubicTo(
-        size.width * 0.18,
-        size.height * 0.02,
-        size.width * 0.36,
-        size.height * 0.34,
-        size.width * 0.62,
-        size.height * 0.12,
-      )
-      ..cubicTo(
-        size.width * 0.78,
-        size.height * -0.02,
-        size.width * 0.92,
-        size.height * 0.10,
-        size.width * 1.08,
-        size.height * 0.04,
-      );
-
-    final secondWave = Path()
-      ..moveTo(size.width * -0.08, size.height * 0.62)
-      ..cubicTo(
-        size.width * 0.18,
-        size.height * 0.42,
-        size.width * 0.35,
-        size.height * 0.78,
-        size.width * 0.66,
-        size.height * 0.50,
-      )
-      ..cubicTo(
-        size.width * 0.82,
-        size.height * 0.36,
-        size.width * 0.95,
-        size.height * 0.44,
-        size.width * 1.10,
-        size.height * 0.32,
-      );
-
-    canvas.drawPath(firstWave, paint);
-    canvas.drawPath(secondWave, paint);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
 class _OnboardingPageData {

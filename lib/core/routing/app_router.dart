@@ -6,7 +6,8 @@ import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/auth/presentation/screens/reset_password_screen.dart';
 import '../../features/auth/presentation/screens/splash_screen.dart';
 import 'package:masar_app/features/onboarding/presentation/screens/onboarding_screen.dart';
-// import '../../features/manager/presentation/screens/manager_home_screen.dart';
+import '../../features/manager/presentation/screens/manager_home_screen.dart';
+import 'package:masar_app/features/manager/presentation/screens/manager_shell_screen.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: SplashScreen.routePath,
@@ -58,11 +59,11 @@ final GoRouter appRouter = GoRouter(
       builder: (context, state) => const OnboardingScreen(),
     ),
 
-    // GoRoute(
-    //   path: ManagerHomeScreen.routePath,
-    //   name: ManagerHomeScreen.routeName,
-    //   builder: (context, state) => const ManagerHomeScreen(),
-    // ),
+    GoRoute(
+      path: ManagerShellScreen.routePath,
+      name: ManagerShellScreen.routeName,
+      builder: (context, state) => const ManagerShellScreen(),
+    ),
   ],
   errorBuilder: (context, state) {
     return Scaffold(
