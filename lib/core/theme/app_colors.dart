@@ -19,8 +19,8 @@ class AppColors {
   static const Color textVariant = Color(0xFF404944);
 
   // Borders & Outlines
-  static const Color outline = Color(0xFF707974);
-  static const Color outlineVariant = Color(0xFFBFC9C3);
+  static const Color outline = Color(0xFFE2E7FF);
+  static const Color outlineVariant = Color(0xFFE2E7FF);
   static const Color inputBorderDefault = Color(0xFFCBD5E1);
 
   // Status Colors

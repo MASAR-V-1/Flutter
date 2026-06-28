@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:masar_app/core/theme/app_strings.dart';
+
 import '../widgets/auth_responsive_layout.dart';
 import 'login_screen.dart';
 import 'reset_password_screen.dart';
@@ -41,54 +43,55 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return AuthResponsiveLayout(
-      title: 'استعادة كلمة المرور',
-      subtitle: 'أدخل بريدك الإلكتروني لإرسال رابط إعادة تعيين كلمة المرور.',
-      sideTitle: 'استعادة آمنة لحسابك',
-      sideSubtitle:
-      'سنرسل رابط إعادة التعيين إلى البريد المرتبط بحسابك. لا تشارك الرابط مع أي شخص.',
-      sideItems: const [
-        'تحقق من البريد الإلكتروني',
-        'رابط مؤقت وآمن',
-        'إعادة تعيين كلمة المرور',
-      ],
+      title: AppStrings.forgotPasswordPageTitle,
+      subtitle: AppStrings.forgotPasswordPageSubtitle,
+      sideTitle: AppStrings.forgotPasswordSideTitle,
+      sideSubtitle: AppStrings.forgotPasswordSideSubtitle,
+      sideItems: AppStrings.forgotPasswordSideItems,
       child: Form(
         key: _formKey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              'نسيت كلمة المرور؟',
+              AppStrings.forgotPasswordTitle,
               style: TextStyle(
                 color: Color(0xFF111827),
                 fontSize: 24,
                 fontWeight: FontWeight.w800,
               ),
             ),
+
             const SizedBox(height: 10),
+
             const Text(
-              'أدخل البريد الإلكتروني المرتبط بحسابك وسنرسل لك رابط إعادة التعيين.',
+              AppStrings.forgotPasswordSubtitle,
               style: TextStyle(
                 color: Color(0xFF6B7280),
                 fontSize: 14,
                 height: 1.6,
               ),
             ),
+
             const SizedBox(height: 30),
 
             AuthTextField(
-              label: 'البريد الإلكتروني',
-              hintText: 'name@organization.org',
+              label: AppStrings.emailLabel,
+              hintText: AppStrings.emailHint,
               controller: _emailController,
               keyboardType: TextInputType.emailAddress,
               icon: Icons.mail_outline,
               validator: (value) {
                 final email = value?.trim() ?? '';
+
                 if (email.isEmpty) {
-                  return 'البريد الإلكتروني مطلوب';
+                  return AppStrings.emailRequired;
                 }
+
                 if (!email.contains('@')) {
-                  return 'أدخل بريدًا إلكترونيًا صحيحًا';
+                  return AppStrings.emailInvalid;
                 }
+
                 return null;
               },
             ),
@@ -98,16 +101,15 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             if (_linkSent) ...[
               const AuthInfoBox(
                 icon: Icons.check_circle_outline,
-                text:
-                'تم إرسال رابط إعادة تعيين كلمة المرور. تحقق من بريدك الإلكتروني واتبع التعليمات.',
+                text: AppStrings.resetLinkSentMessage,
               ),
               const SizedBox(height: 22),
             ],
 
             AuthPrimaryButton(
               text: _linkSent
-                  ? 'إعادة إرسال رابط التعيين'
-                  : 'إرسال رابط إعادة التعيين',
+                  ? AppStrings.resendResetLinkButton
+                  : AppStrings.sendResetLinkButton,
               icon: Icons.send_outlined,
               onPressed: _sendResetLink,
             ),
@@ -115,7 +117,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             const SizedBox(height: 14),
 
             AuthSecondaryButton(
-              text: 'فتح شاشة إعادة التعيين للتجربة',
+              text: AppStrings.openResetPasswordDemo,
               icon: Icons.lock_reset_outlined,
               onPressed: () {
                 context.push(ResetPasswordScreen.routePath);
@@ -124,20 +126,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
             const SizedBox(height: 18),
 
-            Center(
-              child: TextButton.icon(
-                onPressed: () {
-                  context.go(LoginScreen.routePath);
-                },
-                icon: const Icon(Icons.arrow_forward),
-                label: const Text(
-                  'العودة إلى تسجيل الدخول',
-                  style: TextStyle(
-                    color: Color(0xFF0B5F4B),
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-              ),
+            AuthBackToLoginButton(
+              onPressed: () {
+                context.go(LoginScreen.routePath);
+              },
             ),
           ],
         ),

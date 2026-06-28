@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:masar_app/core/theme/app_strings.dart';
+
 import '../widgets/auth_responsive_layout.dart';
 import 'login_screen.dart';
 
@@ -37,7 +39,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: Text('تم تغيير كلمة المرور بنجاح'),
+        content: Text(AppStrings.passwordChangedSuccess),
       ),
     );
 
@@ -47,54 +49,55 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return AuthResponsiveLayout(
-      title: 'تعيين كلمة مرور جديدة',
-      subtitle: 'أدخل رمز التحقق وكلمة المرور الجديدة للمتابعة.',
-      sideTitle: 'حماية حساب المؤسسة',
-      sideSubtitle:
-      'اختر كلمة مرور قوية لحماية بيانات المؤسسة ومساحة العمل الخاصة بها.',
-      sideItems: const [
-        '8 أحرف على الأقل',
-        'يفضل استخدام رقم ورمز خاص',
-        'لا تستخدم كلمة مرور مشتركة',
-      ],
+      title: AppStrings.resetPasswordPageTitle,
+      subtitle: AppStrings.resetPasswordPageSubtitle,
+      sideTitle: AppStrings.resetPasswordSideTitle,
+      sideSubtitle: AppStrings.resetPasswordSideSubtitle,
+      sideItems: AppStrings.resetPasswordSideItems,
       child: Form(
         key: _formKey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              'إعادة تعيين كلمة المرور',
+              AppStrings.resetPasswordTitle,
               style: TextStyle(
                 color: Color(0xFF111827),
                 fontSize: 24,
                 fontWeight: FontWeight.w800,
               ),
             ),
+
             const SizedBox(height: 10),
+
             const Text(
-              'أدخل رمز التحقق المرسل إلى بريدك ثم اختر كلمة مرور جديدة.',
+              AppStrings.resetPasswordSubtitle,
               style: TextStyle(
                 color: Color(0xFF6B7280),
                 fontSize: 14,
                 height: 1.6,
               ),
             ),
+
             const SizedBox(height: 30),
 
             AuthTextField(
-              label: 'رمز التحقق',
-              hintText: 'أدخل رمز التحقق',
+              label: AppStrings.verificationCodeLabel,
+              hintText: AppStrings.verificationCodeHint,
               controller: _codeController,
               keyboardType: TextInputType.number,
               icon: Icons.verified_user_outlined,
               validator: (value) {
                 final code = value?.trim() ?? '';
+
                 if (code.isEmpty) {
-                  return 'رمز التحقق مطلوب';
+                  return AppStrings.verificationCodeRequired;
                 }
+
                 if (code.length < 4) {
-                  return 'رمز التحقق غير صحيح';
+                  return AppStrings.verificationCodeInvalid;
                 }
+
                 return null;
               },
             ),
@@ -102,19 +105,22 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
             const SizedBox(height: 18),
 
             AuthTextField(
-              label: 'كلمة المرور الجديدة',
-              hintText: 'أدخل كلمة المرور الجديدة',
+              label: AppStrings.newPasswordLabel,
+              hintText: AppStrings.newPasswordHint,
               controller: _passwordController,
               isPassword: true,
               icon: Icons.lock_outline,
               validator: (value) {
                 final password = value ?? '';
+
                 if (password.isEmpty) {
-                  return 'كلمة المرور مطلوبة';
+                  return AppStrings.passwordRequired;
                 }
+
                 if (password.length < 8) {
-                  return 'كلمة المرور يجب أن تكون 8 أحرف على الأقل';
+                  return AppStrings.passwordTooShort;
                 }
+
                 return null;
               },
             ),
@@ -122,54 +128,40 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
             const SizedBox(height: 18),
 
             AuthTextField(
-              label: 'تأكيد كلمة المرور',
-              hintText: 'أعد إدخال كلمة المرور',
+              label: AppStrings.confirmPasswordLabel,
+              hintText: AppStrings.confirmPasswordHint,
               controller: _confirmPasswordController,
               isPassword: true,
               icon: Icons.lock_reset_outlined,
               validator: (value) {
                 final confirmPassword = value ?? '';
+
                 if (confirmPassword.isEmpty) {
-                  return 'تأكيد كلمة المرور مطلوب';
+                  return AppStrings.confirmPasswordRequired;
                 }
+
                 if (confirmPassword != _passwordController.text) {
-                  return 'كلمتا المرور غير متطابقتين';
+                  return AppStrings.passwordsDoNotMatch;
                 }
+
                 return null;
               },
             ),
 
             const SizedBox(height: 22),
 
-            const AuthInfoBox(
-              text:
-              'بعد تغيير كلمة المرور سيتم إعادتك إلى شاشة تسجيل الدخول لاستخدام كلمة المرور الجديدة.',
-            ),
-
-            const SizedBox(height: 22),
-
             AuthPrimaryButton(
-              text: 'تغيير كلمة المرور',
+              text: AppStrings.changePasswordButton,
               icon: Icons.check_rounded,
               onPressed: _resetPassword,
             ),
 
             const SizedBox(height: 18),
 
-            Center(
-              child: TextButton.icon(
-                onPressed: () {
-                  context.go(LoginScreen.routePath);
-                },
-                icon: const Icon(Icons.arrow_forward),
-                label: const Text(
-                  'العودة إلى تسجيل الدخول',
-                  style: TextStyle(
-                    color: Color(0xFF0B5F4B),
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-              ),
+            AuthBackToLoginButton(
+              onPressed: () {
+                context.go(LoginScreen.routePath);
+              },
             ),
           ],
         ),
