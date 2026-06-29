@@ -59,6 +59,7 @@ dependencies:
 
   # JSON Models
   json_annotation: ^4.9.0
+  smooth_page_indicator: ^2.0.1
 
 dev_dependencies:
   flutter_test:
