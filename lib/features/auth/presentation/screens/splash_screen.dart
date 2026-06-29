@@ -1,5 +1,5 @@
-import 'dart:async';
-
+import 'package:masar_app/core/storage/app_preferences.dart';
+import 'package:masar_app/features/auth/presentation/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -16,16 +16,24 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  static const String _logoPath = 'assets/images/masar_logo.png';
-
   @override
   void initState() {
     super.initState();
+    _handleSplashNavigation();
+  }
 
-    Timer(const Duration(seconds: 3), () {
-      if (!mounted) return;
+  Future<void> _handleSplashNavigation() async {
+    await Future.delayed(const Duration(seconds: 2));
+
+    final hasSeenOnboarding = await AppPreferences.hasSeenOnboarding();
+
+    if (!mounted) return;
+
+    if (hasSeenOnboarding) {
+      context.go(LoginScreen.routePath);
+    } else {
       context.go(OnboardingScreen.routePath);
-    });
+    }
   }
 
   @override
@@ -118,14 +126,14 @@ class _SplashBody extends StatelessWidget {
                 Container(
                   width: isTablet ? 260 : 200,
                   height: 1.2,
-                  color: Colors.white.withOpacity(0.28),
+                  color: Colors.white.withValues(alpha: 0.28),
                 ),
                 const SizedBox(height: 22),
                 Text(
                   'تنظيم العمليات من مكان واحد',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: Colors.white.withOpacity(0.72),
+                    color: Colors.white.withValues(alpha: 0.72),
                     fontSize: isTablet ? 18 : 13,
                     fontWeight: FontWeight.w600,
                     height: 1.4,
@@ -146,7 +154,7 @@ class _SplashWavePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final solidPaint = Paint()
-      ..color = Colors.white.withOpacity(0.11)
+      ..color = Colors.white.withValues(alpha: 0.11)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
 

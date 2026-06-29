@@ -5,6 +5,11 @@ import '../widgets/auth_responsive_layout.dart';
 import 'forgot_password_screen.dart';
 import 'package:masar_app/features/manager/presentation/screens/manager_shell_screen.dart';
 import 'package:masar_app/core/theme/app_strings.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../cubit/login/login_cubit.dart';
+import '../cubit/login/login_state.dart';
+import 'reset_password_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -34,7 +39,10 @@ class _LoginScreenState extends State<LoginScreen> {
   void _submit() {
     if (!_formKey.currentState!.validate()) return;
 
-    context.go(ManagerShellScreen.routePath);
+    context.read<LoginCubit>().login(
+      email: _emailController.text.trim(),
+      password: _passwordController.text,
+    );
   }
 
   @override
@@ -51,7 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-          AppStrings.loginTitle,
+              AppStrings.loginTitle,
               style: TextStyle(
                 color: Color(0xFF111827),
                 fontSize: 22,
@@ -141,10 +149,49 @@ class _LoginScreenState extends State<LoginScreen> {
 
             const SizedBox(height: 22),
 
-            AuthPrimaryButton(
-              text: AppStrings.loginButton,
-              icon: Icons.arrow_forward,
-              onPressed: _submit,
+            BlocConsumer<LoginCubit, LoginState>(
+              listener: (context, state) {
+                if (state is LoginFailure) {
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text(state.message)));
+                }
+
+                if (state is LoginSuccess) {
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text(state.message)));
+
+                  if (state.user.mustChangePassword) {
+                    context.go(ResetPasswordScreen.routePath);
+                    return;
+                  }
+
+                  if (state.user.role == 'org_admin') {
+                    context.go(ManagerShellScreen.routePath);
+                    return;
+                  }
+
+                  if (state.user.role == 'employee') {
+                    // Temporary until we create the employee shell/dashboard.
+                    context.go(ManagerShellScreen.routePath);
+                    return;
+                  }
+
+                  context.go(ManagerShellScreen.routePath);
+                }
+              },
+              builder: (context, state) {
+                final isLoading = state is LoginLoading;
+
+                return AuthPrimaryButton(
+                  text: isLoading
+                      ? 'جاري تسجيل الدخول...'
+                      : AppStrings.loginButton,
+                  icon: isLoading ? Icons.hourglass_empty : Icons.arrow_forward,
+                  onPressed: isLoading ? () {} : _submit,
+                );
+              },
             ),
           ],
         ),
