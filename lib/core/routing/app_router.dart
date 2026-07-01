@@ -14,6 +14,17 @@ import '../../features/auth/presentation/cubit/login/login_cubit.dart';
 import '../../features/auth/presentation/cubit/forgot_password/forgot_password_cubit.dart';
 import '../../features/auth/presentation/cubit/reset_password/reset_password_cubit.dart';
 import '../../features/auth/presentation/cubit/logout/logout_cubit.dart';
+import '../../features/manager/data/manager_dashboard_repository.dart';
+import '../../features/manager/presentation/cubit/manager_dashboard/manager_dashboard_cubit.dart';
+import '../../features/manager/data/manager_tasks_repository.dart';
+import '../../features/manager/presentation/cubit/manager_tasks/manager_tasks_cubit.dart';
+import '../../features/manager/data/manager_reports_repository.dart';
+import '../../features/manager/presentation/cubit/manager_reports/manager_reports_cubit.dart';
+import '../../features/manager/presentation/cubit/manager_report_details/manager_report_details_cubit.dart';
+import '../../features/manager/presentation/screens/manager_report_details_screen.dart';
+import '../../features/manager/data/manager_operations_repository.dart';
+import '../../features/manager/presentation/cubit/manager_operations/manager_operations_cubit.dart';
+import '../../features/ai/presentation/screens/ai_agent_screen.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: SplashScreen.routePath,
@@ -86,10 +97,59 @@ final GoRouter appRouter = GoRouter(
       path: ManagerShellScreen.routePath,
       name: ManagerShellScreen.routeName,
       builder: (context, state) {
-        return BlocProvider(
-          create: (context) => LogoutCubit(context.read<AuthRepository>()),
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) => LogoutCubit(context.read<AuthRepository>()),
+            ),
+            BlocProvider(
+              create: (context) => ManagerDashboardCubit(
+                context.read<ManagerDashboardRepository>(),
+              )..loadDashboard(),
+            ),
+            BlocProvider(
+              create: (context) =>
+                  ManagerTasksCubit(context.read<ManagerTasksRepository>())
+                    ..loadTasks(),
+            ),
+            BlocProvider(
+              create: (context) =>
+                  ManagerReportsCubit(context.read<ManagerReportsRepository>())
+                    ..loadReports(),
+            ),
+
+            BlocProvider(
+              create: (context) => ManagerOperationsCubit(
+                context.read<ManagerOperationsRepository>(),
+              )..loadOperations(),
+            ),
+          ],
           child: const ManagerShellScreen(),
         );
+      },
+    ),
+
+    GoRoute(
+      path: ManagerReportDetailsScreen.routePath,
+      name: ManagerReportDetailsScreen.routeName,
+      builder: (context, state) {
+        final reportId =
+            int.tryParse(state.pathParameters['reportId'] ?? '') ?? 0;
+
+        return BlocProvider(
+          create: (context) => ManagerReportDetailsCubit(
+            context.read<ManagerReportsRepository>(),
+          )..loadReportDetails(reportId: reportId),
+          child: ManagerReportDetailsScreen(reportId: reportId),
+        );
+      },
+    ),
+
+    GoRoute(
+      path: AiAgentScreen.routePath,
+      name: AiAgentScreen.routeName,
+      builder: (context, state) {
+        return const AiAgentScreen();
       },
     ),
   ],

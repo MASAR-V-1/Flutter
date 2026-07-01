@@ -18,6 +18,48 @@ class ApiEndpoints {
   static const String refreshToken = '/refresh-token';
   static const String me = '/me';
 
+  // Manager Dashboard
+  // This endpoint name is temporary until the backend team confirms the real one.
+  // Mobile will use the same dashboard data as the web, only displayed differently.
+  static const String managerDashboard = '/manager/dashboard';
+  static const String managerTasks = '/manager/tasks';
+
+  static String managerTaskDetails(int taskId) {
+    return '/manager/tasks/$taskId';
+  }
+
+  static String approveManagerTask(int taskId) {
+    return '/manager/tasks/$taskId/approve';
+  }
+
+  static String assignManagerTask(int taskId) {
+    return '/manager/tasks/$taskId/assign';
+  }
+
+  static const String managerReports = '/manager/reports';
+
+  static String managerReportDetails(int reportId) {
+    return '/manager/reports/$reportId';
+  }
+
+  static String reviewManagerReport(int reportId) {
+    return '/manager/reports/$reportId/review';
+  }
+
+  static String approveManagerReport(int reportId) {
+    return '/manager/reports/$reportId/approve';
+  }
+
+  static const String managerOperations = '/manager/operations';
+
+  static String managerOperationDetails(int operationId) {
+    return '/manager/operations/$operationId';
+  }
+
+  static String followUpManagerOperation(int operationId) {
+    return '/manager/operations/$operationId/follow-up';
+  }
+
   // Organization
   static const String organizationProfile = '/organization/profile';
   static const String submitOrganizationForReview =
