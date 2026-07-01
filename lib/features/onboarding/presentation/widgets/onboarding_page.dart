@@ -42,7 +42,7 @@ class OnboardingPage extends StatelessWidget {
                 style: TextStyle(
                   color: AppColors.textPrimary,
                   fontSize: isTablet ? 34 : 28,
-                  fontWeight: FontWeight.w900,
+                  fontWeight: FontWeight.w700,
                   height: 1.3,
                 ),
               ),
